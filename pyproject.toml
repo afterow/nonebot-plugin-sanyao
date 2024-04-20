@@ -1,14 +1,42 @@
 [project]
-name = "sanyao"
-version = "0.2.0"
-description = "sanyao"
+name = "nonebot-plugin-sanyao"
+version = "0.1.1"
+authors = [
+    {name="reine-ishyanami", email="2402979195@qq.com"}
+]
+description = "三爻易数排盘"
 readme = "README.md"
-requires-python = ">=3.8, <4.0"
+license = { text = "AGPL-3" }
+requires-python = ">=3.10, <4.0"
+dependencies = [
+    "cnlunar",
+]
+classifiers = [
+    "Framework :: Pydantic",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Natural Language :: Chinese (Simplified)"
+]
 
 [tool.nonebot]
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = []
-plugin_dirs = ["nonebot_plugin_sanyao/plugins"]
-builtin_plugins = ["echo"]
+plugins = ["nonebot_plugin_sanyao"]
+plugin_dirs = ["src"]
+builtin_plugins = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["nonebot_plugin_sanyao"]
+
+[build-system]
+requires = ["setuptools >= 65.6.3"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+"Homepage" = "https://github.com/afterow/nonebot-plugin-sanyao"
+"Bug Tracker" = "https://github.com/afterow/nonebot-plugin-sanyao/issues"
