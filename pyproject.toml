@@ -27,11 +27,11 @@ adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
 plugins = []
-plugin_dirs = ["nonebot-plugin-sanyao"]
+plugin_dirs = ["nonebot_plugin_sanyao"]
 builtin_plugins = []
 
 [tool.setuptools.packages.find]
-where = ["nonebot-plugin-sanyao"]
+where = ["nonebot_plugin_sanyao"]
 include = []
 
 [build-system]
