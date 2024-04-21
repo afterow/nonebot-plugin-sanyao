@@ -2,7 +2,7 @@ from nonebot.rule import to_me
 from nonebot.plugin import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
-from src.nonebot_plugin_sanyao.sanyao import print_lunar_info_and_bazi
+from .sanyao import print_lunar_info_and_bazi
 
 weather = on_command("三爻", rule=to_me(), aliases={"排盘", "三爻易"}, priority=10, block=True)
 
