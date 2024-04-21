@@ -1,22 +1,16 @@
-from nonebot.plugin import PluginMetadata
+from nonebot.rule import to_me
+from nonebot.plugin import on_command
+from nonebot.adapters import Message
+from nonebot.params import CommandArg
+from .sanyao import print_lunar_info_and_bazi
 
-from .config import Config
+weather = on_command("三爻", rule=to_me(), aliases={"三爻排盘", "三爻易"}, priority=10, block=True)
 
-__plugin_meta__ = PluginMetadata(
-    name="{三爻易数}",
-    description="{三爻易数排盘}",
-    usage="{插件用法}",
-
-    type="{application}",
-    # 发布必填，当前有效类型有：`library`（为其他插件编写提供功能），`application`（向机器人用户提供功能）。
-
-    homepage="{https://github.com/afterow/nonebot-plugin-sanyao}",
-    # 发布必填。
-
-    config=Config,
-    # 插件配置项类，如无需配置可不填写。
-
-    supported_adapters={"~onebot.v11", "~telegram"},
-    # 支持的适配器集合，其中 `~` 在此处代表前缀 `nonebot.adapters.`，其余适配器亦按此格式填写。
-    # 若插件可以保证兼容所有适配器（即仅使用基本适配器功能）可不填写，否则应该列出插件支持的适配器。
-)
+@weather.handle()
+async def handle_function(args: Message = CommandArg()):
+    # 提取参数纯文本作为地名，并判断是否有效
+    if location := args.extract_plain_text():
+        xx=print_lunar_info_and_bazi(location)
+        await weather.finish(xx)
+    else:
+        await weather.finish("请输入参数 如/三爻 101")
