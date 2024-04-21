@@ -2,7 +2,7 @@
 name = "nonebot-plugin-sanyao"
 version = "0.1.1"
 authors = [
-    {name="reine-ishyanami", email="2402979195@qq.com"}
+    {name="afterow", email="afterow@163.com"}
 ]
 description = "三爻易数排盘"
 readme = "README.md"
