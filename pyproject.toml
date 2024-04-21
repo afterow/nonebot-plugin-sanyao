@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-sanyao"
-version = "0.1.1"
+version = "0.1.4"
 authors = [
     {name="afterow", email="afterow@163.com"}
 ]
