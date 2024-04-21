@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-sanyao"
-version = "0.1.2"
+version = "0.1.4"
 authors = [
     {name="afterow", email="afterow@163.com"}
 ]
@@ -13,7 +13,7 @@ dependencies = [
 ]
 classifiers = [
     "Framework :: Pydantic",
-    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
@@ -25,13 +25,13 @@ classifiers = [
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = ["nonebot_plugin_sanyao"]
+plugins = []
 plugin_dirs = ["src"]
 builtin_plugins = []
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["nonebot_plugin_sanyao"]
+include = []
 
 [build-system]
 requires = ["setuptools >= 65.6.3"]
