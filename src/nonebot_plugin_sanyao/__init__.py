@@ -4,7 +4,7 @@ from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from .sanyao import print_lunar_info_and_bazi
 
-weather = on_command("三爻", rule=to_me(), aliases={"排盘", "三爻易"}, priority=10, block=True)
+weather = on_command("三爻", rule=to_me(), aliases={"三爻排盘", "三爻易"}, priority=10, block=True)
 
 @weather.handle()
 async def handle_function(args: Message = CommandArg()):
