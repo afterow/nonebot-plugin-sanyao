@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='nonebot-plugin-sanyao',  # 应用名（pip安装和卸载时的名字）
-    version='0.1.4',  # 当前版本
+    version='0.1.2',  # 当前版本
     author='afterow',  # 作者
     author_email='afterow@163.com',  # 作者邮箱
     licence='MIT License',  # 许可协议
