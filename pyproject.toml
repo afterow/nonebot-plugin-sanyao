@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-sanyao"
-version = "0.2.2"
+dynamic = ["version"]
 authors = [
     { name = "afterow", email = "afterow@163.com" }
 ]
@@ -29,3 +29,7 @@ classifiers = [
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool.pdm.version]
+source = "file"
+path = "nonebot_plugin_sanyao/__init__.py"
