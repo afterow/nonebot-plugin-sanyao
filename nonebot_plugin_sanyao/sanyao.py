@@ -149,10 +149,16 @@ def print_lunar_info_and_bazi(nums_list):
     # print(a.lunarMonthCn, a.lunarDayCn)
     #
     # # 今日八字
-    # print(a.year8Char[0] + a.month8Char[0] + a.day8Char[0] + a.twohour8Char[0])
-    # print(a.year8Char[1] + a.month8Char[1] + a.day8Char[1] + a.twohour8Char[1])
+    a1=(a.year8Char[0] + a.month8Char[0] + a.day8Char[0] + a.twohour8Char[0])
+    a2=(a.year8Char[1] + a.month8Char[1] + a.day8Char[1] + a.twohour8Char[1])
 
     # 目标值并切换元素
     target_value = biangua[1][0]
-    cc = toggle_element(target_value)
+    a3 = toggle_element(target_value)
+
+    cc = """{a1}
+{a2}
+{a3}
+    """.format(a1=a1, a2=a2, a3=a3)
     return cc
+

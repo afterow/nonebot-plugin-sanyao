@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-sanyao"
-version = "0.2.2"
+version = "0.2.3"
 authors = [
     {name="afterow", email="afterow@163.com"}
 ]
@@ -31,7 +31,7 @@ plugin_dirs = ["nonebot_plugin_sanyao"]
 builtin_plugins = []
 
 [tool.setuptools.packages.find]
-where = ['nonebot_plugin_sanyao']
+where = []
 include = []
 
 [build-system]
