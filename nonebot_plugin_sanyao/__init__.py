@@ -3,7 +3,7 @@ from nonebot.plugin import PluginMetadata
 from .config import Config
 from . import __main__
 
-__version__ = "0.2.4"
+__version__ = "0.2.7"
 __plugin_meta__ = PluginMetadata(
     name="三爻易数",
     description="三爻易数排盘",
