@@ -161,4 +161,3 @@ def print_lunar_info_and_bazi(nums_list):
 {a3}
     """.format(a1=a1, a2=a2, a3=a3)
     return cc
-
