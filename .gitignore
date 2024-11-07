@@ -176,4 +176,5 @@ pyrightconfig.json
 !.vscode/*.code-snippets
 /.venv/
 /.github/
+
 /.pdm-build/
