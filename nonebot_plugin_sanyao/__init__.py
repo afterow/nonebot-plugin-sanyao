@@ -11,5 +11,5 @@ __plugin_meta__ = PluginMetadata(
     type="application",
     homepage="https://github.com/afterow/nonebot-plugin-sanyao",
     config=Config,
-    supported_adapters=None,
+    supported_adapters="nonebot.adapters.onebot",
 )
