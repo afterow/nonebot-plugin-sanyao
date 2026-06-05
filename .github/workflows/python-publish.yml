@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
-      id-token: write
+      id-token: write   # 可信发布必需
 
     steps:
       - name: Checkout
@@ -23,9 +22,5 @@ jobs:
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v3
 
-
       - name: Build and Publish distribution 📦 to PyPI
-        env:
-          PDM_PUBLISH_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-          PDM_PUBLISH_USERNAME: __token__
         run: pdm publish
