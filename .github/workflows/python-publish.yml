@@ -23,5 +23,9 @@ jobs:
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v3
 
+
       - name: Build and Publish distribution 📦 to PyPI
+        env:
+          PDM_PUBLISH_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          PDM_PUBLISH_USERNAME: __token__
         run: pdm publish
