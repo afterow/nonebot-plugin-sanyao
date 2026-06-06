@@ -1,16 +1,7 @@
-name: "Test Single Plugin"
+name: "Test Single Plugin (Hardcoded)"
 
 on:
   workflow_dispatch:
-    inputs:
-      plugin_url:
-        description: "Plugin GitHub URL"
-        required: true
-        default: "https://github.com/afterow/nonebot-plugin-sanyao"
-      plugin_name:
-        description: "Plugin name (optional, auto-detect if empty)"
-        required: false
-        default: ""
 
 concurrency:
   group: "single-plugin-test"
@@ -19,7 +10,7 @@ concurrency:
 jobs:
   test_plugin:
     runs-on: ubuntu-latest
-    name: Test NoneBot2 Plugin
+    name: Test nonebot-plugin-sanyao
     steps:
       - name: Checkout noneflow
         uses: actions/checkout@v4
@@ -35,29 +26,17 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Extract plugin name from URL
-        id: extract
-        run: |
-          if [ -n "${{ github.event.inputs.plugin_name }}" ]; then
-            echo "PLUGIN_NAME=${{ github.event.inputs.plugin_name }}" >> $GITHUB_OUTPUT
-          else
-            # 从 URL 提取仓库名作为插件名
-            PLUGIN_NAME=$(echo "${{ github.event.inputs.plugin_url }}" | sed 's|.*/||' | sed 's|\.git$||')
-            echo "PLUGIN_NAME=$PLUGIN_NAME" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Test plugin
+      - name: Test plugin (hardcoded)
         run: |
           uv run --no-dev -m src.providers.store_test plugin-test \
-            --plugin ${{ steps.extract.outputs.PLUGIN_NAME }} \
+            --plugin nonebot-plugin-sanyao \
             --offset 0 \
-            --limit 1 \
-            ${{ github.event.inputs.args }}
+            --limit 1
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ steps.extract.outputs.PLUGIN_NAME }}
+          name: test-results-nonebot-plugin-sanyao
           path: |
             ${{ github.workspace }}/plugin_test/results.json
             ${{ github.workspace }}/plugin_test/plugins.json
