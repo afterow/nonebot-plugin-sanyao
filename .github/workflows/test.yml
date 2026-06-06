@@ -26,8 +26,9 @@ jobs:
         with:
           enable-cache: true
 
+      # 修改：使用单引号包裹 --key 参数值
       - name: Test plugin using --key
         run: |
           uv run --no-dev -m src.providers.store_test plugin-test \
-            --key "pypi://nonebot-plugin-sanyao" \
+            --key 'pypi://nonebot-plugin-sanyao' \
             --force
