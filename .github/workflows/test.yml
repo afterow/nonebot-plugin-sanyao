@@ -1,33 +1,95 @@
-name: "Test Single Plugin with Key"
+name: NoneFlow
 
 on:
-  workflow_dispatch:
+  issues:
+    types: [opened, reopened, edited]
+  issue_comment:
+    types: [created]
+  pull_request_target:
+    types: [closed]
+  pull_request_review:
+    types: [submitted]
 
 concurrency:
-  group: "single-plugin-test"
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.event.issue.number && format('publish/issue{0}', github.event.issue.number) || github.head_ref || github.run_id }}
+  cancel-in-progress: ${{ startsWith(github.head_ref, 'publish/issue')}}
 
 jobs:
-  test_plugin:
+  noneflow:
     runs-on: ubuntu-latest
-    name: Test nonebot-plugin-sanyao
+    name: noneflow
+    # 保持原过滤逻辑，也可以额外增加标题过滤，但非必须
+    if: |
+      !(
+        (
+          github.event.pull_request &&
+          (
+            github.event.pull_request.head.repo.fork ||
+            !(
+              contains(github.event.pull_request.labels.*.name, 'Plugin') ||
+              contains(github.event.pull_request.labels.*.name, 'Adapter') ||
+              contains(github.event.pull_request.labels.*.name, 'Bot')
+            )
+          )
+        ) ||
+        (
+          github.event_name == 'issue_comment' && github.event.issue.pull_request
+        )
+      )
     steps:
-      - name: Checkout noneflow
-        uses: actions/checkout@v4
+      - name: Generate token
+        id: generate-token
+        uses: tibdex/github-app-token@v2
         with:
-          repository: nonebot/noneflow
-          fetch-depth: 0
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_KEY }}
 
-      - name: Checkout latest noneflow version
-        run: git checkout `git describe --abbrev=0 --tags`
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - name: Checkout Code
+        uses: actions/checkout@v6
         with:
-          enable-cache: true
+          token: ${{ steps.generate-token.outputs.token }}
 
-      - name: Test plugin using --key
+      # 动态生成只包含 nonebot-plugin-sanyao 的注册表文件
+      - name: Generate single-plugin registry
         run: |
-          uv run --no-dev -m src.providers.store_test plugin-test \
-            --key 'nonebot-plugin-sanyao' \
-            --force
+          mkdir -p .tmp_registry
+          cat > .tmp_registry/plugins.json5 << 'EOF'
+          {
+            plugins: [
+              {
+                id: "nonebot-plugin-sanyao",
+                name: "三遥插件",
+                desc: "插件描述（请按实际情况修改）",
+                author: "afterow",
+                repo: "https://github.com/afterow/nonebot-plugin-sanyao",
+                tags: ["example"]
+              }
+            ]
+          }
+          EOF
+          # 同时生成空的 bots.json5 和 adapters.json5 以避免 NoneFlow 读取默认文件报错
+          echo '{bots: []}' > .tmp_registry/bots.json5
+          echo '{adapters: []}' > .tmp_registry/adapters.json5
+
+      - name: NoneFlow
+        uses: docker://ghcr.io/nonebot/noneflow:latest
+        with:
+          config: >
+            {
+              "base": "master",
+              "plugin_path": ".tmp_registry/plugins.json5",
+              "bot_path": ".tmp_registry/bots.json5",
+              "adapter_path": ".tmp_registry/adapters.json5",
+              "registry_repository": "nonebot/registry",
+              "artifact_path": "artifact"
+            }
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          PRIVATE_KEY: ${{ secrets.APP_KEY }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: noneflow
+          path: artifact/*
+          if-no-files-found: ignore
