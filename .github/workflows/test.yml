@@ -26,12 +26,12 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Test plugin (hardcoded)
+      - name: Test plugin
         run: |
           uv run --no-dev -m src.providers.store_test plugin-test \
-            --plugin nonebot-plugin-sanyao \
             --offset 0 \
-            --limit 1
+            --limit 1 \
+            nonebot-plugin-sanyao
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
