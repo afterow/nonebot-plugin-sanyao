@@ -1,6 +1,7 @@
 name: NoneFlow
 
 on:
+  workflow_dispatch:        # 新增：支持手动触发
   issues:
     types: [opened, reopened, edited]
   issue_comment:
@@ -18,22 +19,24 @@ jobs:
   noneflow:
     runs-on: ubuntu-latest
     name: noneflow
-    # 保持原过滤逻辑，也可以额外增加标题过滤，但非必须
+    # 保持原过滤逻辑（仅当通过 Issue/PR 触发时生效；手动触发时跳过此条件）
     if: |
-      !(
-        (
-          github.event.pull_request &&
+      github.event_name != 'workflow_dispatch' && (
+        !(
           (
-            github.event.pull_request.head.repo.fork ||
-            !(
-              contains(github.event.pull_request.labels.*.name, 'Plugin') ||
-              contains(github.event.pull_request.labels.*.name, 'Adapter') ||
-              contains(github.event.pull_request.labels.*.name, 'Bot')
+            github.event.pull_request &&
+            (
+              github.event.pull_request.head.repo.fork ||
+              !(
+                contains(github.event.pull_request.labels.*.name, 'Plugin') ||
+                contains(github.event.pull_request.labels.*.name, 'Adapter') ||
+                contains(github.event.pull_request.labels.*.name, 'Bot')
+              )
             )
+          ) ||
+          (
+            github.event_name == 'issue_comment' && github.event.issue.pull_request
           )
-        ) ||
-        (
-          github.event_name == 'issue_comment' && github.event.issue.pull_request
         )
       )
     steps:
@@ -49,7 +52,7 @@ jobs:
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
-      # 动态生成只包含 nonebot-plugin-sanyao 的注册表文件
+      # 动态生成只包含 nonebot-plugin-sanyao 的注册表文件（同时生成空的 bot/adapter 文件）
       - name: Generate single-plugin registry
         run: |
           mkdir -p .tmp_registry
@@ -67,7 +70,6 @@ jobs:
             ]
           }
           EOF
-          # 同时生成空的 bots.json5 和 adapters.json5 以避免 NoneFlow 读取默认文件报错
           echo '{bots: []}' > .tmp_registry/bots.json5
           echo '{adapters: []}' > .tmp_registry/adapters.json5
 
