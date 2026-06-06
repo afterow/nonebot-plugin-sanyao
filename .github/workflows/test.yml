@@ -21,18 +21,13 @@ jobs:
       - name: Checkout latest noneflow version
         run: git checkout `git describe --abbrev=0 --tags`
 
-      - name: Install the latest version of uv
+      - name: Install uv
         uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
 
-      # 修改：使用单引号包裹 --key 参数值
       - name: Test plugin using --key
         run: |
           uv run --no-dev -m src.providers.store_test plugin-test \
-            --key 'pypi://nonebot-plugin-sanyao' \
+            --key 'pypi::nonebot-plugin-sanyao' \
             --force
-
-
-      - name: Show help
-        run: uv run --no-dev -m src.providers.store_test plugin-test --help
